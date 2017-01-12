@@ -1,4 +1,9 @@
-body{
-	background-color:red;
+$black = #111111;
+$silver = #DDDDDD;
+$good = #2ECC40;
+$false = #FF4136;
 
+
+body{
+	background-color:$black;
 }
