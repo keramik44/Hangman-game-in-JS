@@ -80,14 +80,16 @@ body {
   padding: 0px 4px 8px 4px;
   border: #DDDDDD solid 2px;
   border-radius: 15px;
-  margin-bottom: 15px; }
+  margin-bottom: 15px;
+  box-shadow: 0 4px #444; }
 
 .key:hover,
 .reset:hover {
   border: #FFDC00 solid 2px;
   color: #FFDC00;
   cursor: pointer;
-  transform: translateY(3px); }
+  transform: translateY(3px);
+  box-shadow: 0 0 #444; }
 
 .key:active,
 .reset:active {

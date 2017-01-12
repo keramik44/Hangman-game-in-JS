@@ -88,12 +88,14 @@ body{
 	 border: $silver solid 2px;
 	 border-radius: 15px;
 	 margin-bottom: 15px;
+	 box-shadow: 0 4px #444;
  }
  .key:hover,
  .reset:hover{
 	 border: $active solid 2px;
 	 color: $active;
 	 cursor: pointer;  transform: translateY(3px);
+	 box-shadow: 0 0 #444;
  }
 .key:active,
 .reset:active{
