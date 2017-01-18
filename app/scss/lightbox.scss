@@ -8,7 +8,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 .hide{
   display: none;
+}
+.lightbox > h2{
+  color: white;
 }

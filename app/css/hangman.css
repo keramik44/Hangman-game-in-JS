@@ -10,10 +10,15 @@
   -ms-flex-align: center;
   align-items: center;
   -ms-flex-pack: center;
-  justify-content: center; }
+  justify-content: center;
+  -ms-flex-direction: column;
+  flex-direction: column; }
 
 .hide {
   display: none; }
+
+.lightbox > h2 {
+  color: white; }
 
 body {
   background-color: #111111; }
