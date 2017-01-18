@@ -132,6 +132,11 @@ var Hangman = function () {
         return _status.uPass;
     };
 
+    var _clearStatus = function _clearStatus() {
+        _status.falseMoves = 0;
+        _status.usedLetter = [];
+    };
+
     return {
         setPass: _setPass,
         status: _status,
@@ -142,7 +147,8 @@ var Hangman = function () {
         gameState: _gameState,
         isLetterCorrect: _isLetterValid, //used
         getFalse: _getFalseMove, //used
-        getUPass: _getUndercoverPass
+        getUPass: _getUndercoverPass,
+        clear: _clearStatus
     };
 }();
 
@@ -150,7 +156,8 @@ var HangmanInterface = function () {
     var _letters = document.querySelectorAll('.key'),
         _reset = document.querySelector('.reset'),
         _screen = document.querySelector('.game-image'),
-        _pass = document.querySelector('.key-word');
+        _pass = document.querySelector('.key-word'),
+        _lightBox = document.querySelector("#gameResult");
 
     var _changeScreen = function _changeScreen(number) {
         _screen.className = 'game-image screen' + number;
@@ -160,17 +167,70 @@ var HangmanInterface = function () {
         _pass.textContent = Hangman.getUPass();
     };
 
+    var _markLetter = function _markLetter(bool, letter) {
+        if (bool) {
+            letter.className = "correct";
+        } else {
+            letter.className = "false";
+        }
+    };
+
+    var _setImgLightBox = function _setImgLightBox(score) {
+        if (score === "lost") {
+            _lightBox.querySelector("img").src = "img/died.jpg";
+        } else if (score === "won") {
+            _lightBox.querySelector("img").src = "img/winner.jpg";
+        }
+    };
+    var _hideLightBox = function _hideLightBox() {
+        _lightBox.className = "hide";
+    };
+    var _showLightBox = function _showLightBox(scoore) {
+        _setImgLightBox(scoore);
+        _lightBox.className = "lightbox";
+        _lightBox.addEventListener("click", _hideLightBox);
+    };
+
+    var _setClearBoard = function _setClearBoard() {
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
+
+        try {
+            for (var _iterator3 = _letters[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var letter = _step3.value;
+
+                letter.className = "key";
+            }
+        } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                }
+            } finally {
+                if (_didIteratorError3) {
+                    throw _iteratorError3;
+                }
+            }
+        }
+    };
     return {
         reset: _reset,
         letters: _letters,
         changeScreen: _changeScreen,
-        updatePass: _updatePass
+        updatePass: _updatePass,
+        markLetter: _markLetter,
+        clearIF: _setClearBoard,
+        showLightBox: _showLightBox
     };
 }();
 
 var PassGenerator = function () {
 
-    var _generate = function _generate(funct, init) {
+    var _generate = function _generate(funct) {
         var xml = new XMLHttpRequest();
         var webService = "http://www.setgetgo.com/randomword/get.php";
 
@@ -199,57 +259,65 @@ var HangmanController = function () {
     var letters = HangmanInterface.letters,
         reset = HangmanInterface.reset;
 
-    var markLetter = function markLetter(bool, letter) {
-        if (bool) {
-            letter.className = "correct";
-        } else {
-            letter.className = "false";
-        }
+    var _setGame = function _setGame(pass) {
+        Hangman.setPass(pass);
+        Hangman.setUPass(pass);
+        HangmanInterface.updatePass(Hangman.getUPass());
     };
+    var _playGame = function _playGame() {
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
 
-    var _init = function _init() {
-        document.addEventListener("DOMContentLoaded", function (event) {
-            Hangman.setUPass();
-            HangmanInterface.updatePass();
+        try {
+            for (var _iterator4 = letters[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                var letter = _step4.value;
 
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
+                letter.addEventListener("click", function () {
+                    var key = this.id;
+                    var isCorrect = Hangman.isLetterCorrect(key);
 
+                    Hangman.addLetter(key);
+                    HangmanInterface.markLetter(isCorrect, this);
+
+                    if (isCorrect) {
+                        Hangman.updateUPass(key);
+                        HangmanInterface.updatePass();
+                    } else {
+                        Hangman.makeFalseMove();
+                        HangmanInterface.changeScreen(Hangman.getFalse());
+                    }
+                    if (Hangman.gameState() !== 'ongoing') {
+                        HangmanInterface.showLightBox(Hangman.gameState());
+                    };
+                });
+            }
+        } catch (err) {
+            _didIteratorError4 = true;
+            _iteratorError4 = err;
+        } finally {
             try {
-                for (var _iterator3 = letters[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var letter = _step3.value;
-
-                    letter.addEventListener("click", function () {
-                        var key = this.id;
-                        var isCorrect = Hangman.isLetterCorrect(key);
-                        Hangman.addLetter(key);
-
-                        markLetter(isCorrect, this);
-                        if (isCorrect) {
-                            Hangman.updateUPass(key);
-                            HangmanInterface.updatePass();
-                        } else {
-                            Hangman.makeFalseMove();
-                            HangmanInterface.changeScreen(Hangman.getFalse());
-                        }
-                        console.log(Hangman.gameState());
-                    });
+                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                    _iterator4.return();
                 }
-            } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
             } finally {
-                try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                        _iterator3.return();
-                    }
-                } finally {
-                    if (_didIteratorError3) {
-                        throw _iteratorError3;
-                    }
+                if (_didIteratorError4) {
+                    throw _iteratorError4;
                 }
             }
+        }
+    };
+    var _resetGame = function _resetGame() {
+        PassGenerator.generate(_setGame);
+        Hangman.clear();
+        HangmanInterface.clearIF();
+        HangmanInterface.changeScreen(0);
+    };
+    var _init = function _init() {
+        document.addEventListener("DOMContentLoaded", function (event) {
+            PassGenerator.generate(_setGame);
+            _playGame();
+            reset.addEventListener("click", _resetGame);
         });
     };
 
@@ -258,6 +326,4 @@ var HangmanController = function () {
     };
 }();
 
-//to do reset, pass generator and jumping out 'window' at the end of game ;-) (divide _init! )
 HangmanController.init();
-PassGenerator.generate(Hangman.setPass);

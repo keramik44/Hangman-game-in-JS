@@ -86,6 +86,10 @@ let Hangman = (function () {
         return _status.uPass;
     };
 
+    let _clearStatus = function(){
+        _status.falseMoves = 0;
+        _status.usedLetter = [];
+    };
 
     return {
         setPass: _setPass,
@@ -97,7 +101,8 @@ let Hangman = (function () {
         gameState: _gameState,
         isLetterCorrect: _isLetterValid,  //used
         getFalse: _getFalseMove, //used
-        getUPass: _getUndercoverPass
+        getUPass: _getUndercoverPass,
+        clear: _clearStatus
     };
 })();
 
@@ -106,7 +111,8 @@ let HangmanInterface = (function () {
     const _letters = document.querySelectorAll('.key'),
           _reset   = document.querySelector('.reset'),
           _screen  = document.querySelector('.game-image'),
-          _pass    = document.querySelector('.key-word');
+          _pass    = document.querySelector('.key-word'),
+          _lightBox= document.querySelector("#gameResult");
 
     let _changeScreen = function (number) {
         _screen.className = 'game-image screen'+number;
@@ -116,17 +122,50 @@ let HangmanInterface = (function () {
         _pass.textContent = Hangman.getUPass();
     };
 
+    let _markLetter = function(bool,letter){
+        if(bool){
+            letter.className =  "correct";
+        }else{
+            letter.className = "false";
+        }
+    };
+
+    let _setImgLightBox = function(score){
+        if(score==="lost"){
+            _lightBox.querySelector("img").src ="img/died.jpg";
+        }else if(score==="won"){
+            _lightBox.querySelector("img").src ="img/winner.jpg";
+        }
+    };
+    let _hideLightBox = function(){
+        _lightBox.className = "hide";
+    };
+    let _showLightBox = function(scoore){
+        _setImgLightBox(scoore);
+       _lightBox.className = "lightbox";
+       _lightBox.addEventListener("click",_hideLightBox);
+    };
+
+
+    let _setClearBoard = function(){
+      for(let letter of _letters){
+          letter.className = "key";
+      }
+    };
     return{
         reset: _reset,
         letters: _letters,
         changeScreen: _changeScreen,
-        updatePass: _updatePass
-    }
+        updatePass: _updatePass,
+        markLetter: _markLetter,
+        clearIF: _setClearBoard,
+        showLightBox: _showLightBox
+    };
 })();
 
 let PassGenerator = (function () {
 
-    let _generate = function(funct, init){
+    let _generate = function(funct){
         const xml = new XMLHttpRequest();
         const webService = "http://www.setgetgo.com/randomword/get.php";
 
@@ -156,37 +195,46 @@ let HangmanController = (function(){
     const letters= HangmanInterface.letters,
           reset = HangmanInterface.reset;
 
-    let markLetter = function(bool,letter){
-        if(bool){
-            letter.className =  "correct";
-        }else{
-            letter.className = "false";
+
+
+    let _setGame = function (pass){
+        Hangman.setPass(pass);
+        Hangman.setUPass(pass);
+        HangmanInterface.updatePass(Hangman.getUPass());
+    };
+    let _playGame = function(){
+        for(let letter of letters){
+            letter.addEventListener("click",function(){
+                let key=this.id;
+                let isCorrect = Hangman.isLetterCorrect(key);
+
+                Hangman.addLetter(key);
+                HangmanInterface.markLetter(isCorrect,this);
+
+                if(isCorrect){
+                    Hangman.updateUPass(key);
+                    HangmanInterface.updatePass();
+                }else{
+                    Hangman.makeFalseMove();
+                    HangmanInterface.changeScreen(Hangman.getFalse());
+                }
+                if(Hangman.gameState()!=='ongoing'){
+                    HangmanInterface.showLightBox(Hangman.gameState());
+                };
+            });
         }
     };
-
+    let _resetGame = function(){
+        PassGenerator.generate(_setGame);
+        Hangman.clear();
+        HangmanInterface.clearIF();
+        HangmanInterface.changeScreen(0);
+    };
     let _init = function(){
         document.addEventListener("DOMContentLoaded", function(event) {
-            Hangman.setUPass();
-            HangmanInterface.updatePass();
-
-            for(let letter of letters){
-                letter.addEventListener("click",function(){
-                    let key=this.id;
-                    let isCorrect = Hangman.isLetterCorrect(key);
-                    Hangman.addLetter(key);
-
-                    markLetter(isCorrect,this);
-                    if(isCorrect){
-                        Hangman.updateUPass(key);
-                        HangmanInterface.updatePass();
-                    }else{
-                        Hangman.makeFalseMove();
-                        HangmanInterface.changeScreen(Hangman.getFalse());
-                    }
-                    console.log(Hangman.gameState());
-                });
-            }
-
+            PassGenerator.generate(_setGame);
+            _playGame();
+            reset.addEventListener("click",_resetGame);
         });
     };
 
@@ -195,6 +243,4 @@ let HangmanController = (function(){
     }
 })();
 
-//to do reset, pass generator and jumping out 'window' at the end of game ;-) (divide _init! )
 HangmanController.init();
-PassGenerator.generate(Hangman.setPass);
