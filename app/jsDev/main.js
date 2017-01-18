@@ -8,11 +8,11 @@ let Hangman = (function () {
     let _status = {
         pass: 'KURKA WODNA',
         uPass:'',
-        falsemoves: 0,
+        falseMoves: 0,
         usedLetter: []
     };
 
-    let _setPass = (newPss)=> {_status.pass = newPss;};
+    let _setPass = (newPass)=> {_status.pass = newPass;};
 
     let _setUndercoverPass = function(){
         let result = '';
@@ -66,13 +66,13 @@ let Hangman = (function () {
         }
     };
     let _MakeFalseMove = function(){
-        if(_status.falsemoves<9)
-        _status.falsemoves++;
+        if(_status.falseMoves<9)
+        _status.falseMoves++;
     };
     let _gameState = function(){
       if(_status.pass===_status.uPass){
           return 'won';
-      }else if(_status.falsemoves===9){
+      }else if(_status.falseMoves===9){
           return 'lost';
       }else{
           return 'ongoing';
@@ -80,7 +80,7 @@ let Hangman = (function () {
     };
 
     let _getFalseMove = function(){
-        return _status.falsemoves;
+        return _status.falseMoves;
     };
     let _getUndercoverPass = function(){
         return _status.uPass;
@@ -123,6 +123,33 @@ let HangmanInterface = (function () {
         updatePass: _updatePass
     }
 })();
+
+let PassGenerator = (function () {
+
+    let _generate = function(funct, init){
+        const xml = new XMLHttpRequest();
+        const webService = "http://www.setgetgo.com/randomword/get.php";
+
+        if(typeof xml ==='undefined'){return 'TURN ON XMLHTTP'; }
+
+        xml.onreadystatechange = function () {
+            if (xml.readyState == 4) {
+                if (xml.status == 200) {
+                     funct(xml.responseText.toUpperCase());
+                }
+            }
+        };
+
+        xml.open("GET", webService, true);
+        xml.send(null);
+    };
+
+    return{
+        generate:_generate
+    }
+})();
+
+
 
 
 let HangmanController = (function(){
@@ -170,3 +197,4 @@ let HangmanController = (function(){
 
 //to do reset, pass generator and jumping out 'window' at the end of game ;-) (divide _init! )
 HangmanController.init();
+PassGenerator.generate(Hangman.setPass);

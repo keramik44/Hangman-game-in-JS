@@ -8,12 +8,12 @@ var Hangman = function () {
     var _status = {
         pass: 'KURKA WODNA',
         uPass: '',
-        falsemoves: 0,
+        falseMoves: 0,
         usedLetter: []
     };
 
-    var _setPass = function _setPass(newPss) {
-        _status.pass = newPss;
+    var _setPass = function _setPass(newPass) {
+        _status.pass = newPass;
     };
 
     var _setUndercoverPass = function _setUndercoverPass() {
@@ -113,12 +113,12 @@ var Hangman = function () {
         }
     };
     var _MakeFalseMove = function _MakeFalseMove() {
-        if (_status.falsemoves < 9) _status.falsemoves++;
+        if (_status.falseMoves < 9) _status.falseMoves++;
     };
     var _gameState = function _gameState() {
         if (_status.pass === _status.uPass) {
             return 'won';
-        } else if (_status.falsemoves === 9) {
+        } else if (_status.falseMoves === 9) {
             return 'lost';
         } else {
             return 'ongoing';
@@ -126,7 +126,7 @@ var Hangman = function () {
     };
 
     var _getFalseMove = function _getFalseMove() {
-        return _status.falsemoves;
+        return _status.falseMoves;
     };
     var _getUndercoverPass = function _getUndercoverPass() {
         return _status.uPass;
@@ -165,6 +165,33 @@ var HangmanInterface = function () {
         letters: _letters,
         changeScreen: _changeScreen,
         updatePass: _updatePass
+    };
+}();
+
+var PassGenerator = function () {
+
+    var _generate = function _generate(funct, init) {
+        var xml = new XMLHttpRequest();
+        var webService = "http://www.setgetgo.com/randomword/get.php";
+
+        if (typeof xml === 'undefined') {
+            return 'TURN ON XMLHTTP';
+        }
+
+        xml.onreadystatechange = function () {
+            if (xml.readyState == 4) {
+                if (xml.status == 200) {
+                    funct(xml.responseText.toUpperCase());
+                }
+            }
+        };
+
+        xml.open("GET", webService, true);
+        xml.send(null);
+    };
+
+    return {
+        generate: _generate
     };
 }();
 
@@ -233,3 +260,4 @@ var HangmanController = function () {
 
 //to do reset, pass generator and jumping out 'window' at the end of game ;-) (divide _init! )
 HangmanController.init();
+PassGenerator.generate(Hangman.setPass);
