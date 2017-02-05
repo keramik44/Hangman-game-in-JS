@@ -9,34 +9,34 @@ const babel = require('gulp-babel');
 gulp.task('serve', ['sass'], function() {
 
     browserSync.init({
-        server: "./app"
+        server: "./www"
     });
 
-    gulp.watch("app/scss/*.scss", ['sass']);
-    gulp.watch("app/*.html").on('change', browserSync.reload);
-    gulp.watch("app/projects/*.html").on('change', browserSync.reload);
-	gulp.watch("app/jsDev/*.js", ['babel']);
-	gulp.watch("app/jsDev/*.js").on('change', browserSync.reload);
+    gulp.watch("www/scss/*.scss", ['sass']);
+    gulp.watch("www/*.html").on('change', browserSync.reload);
+    gulp.watch("www/projects/*.html").on('change', browserSync.reload);
+	gulp.watch("www/jsDev/*.js", ['babel']);
+	gulp.watch("www/jsDev/*.js").on('change', browserSync.reload);
 });
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function() {
-    return gulp.src("app/scss/*.scss")
+    return gulp.src("www/scss/*.scss")
         .pipe(sass())
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(gulp.dest("app/css"))
+        .pipe(gulp.dest("www/css"))
         .pipe(browserSync.stream());
 });
 
 gulp.task('babel', () => {
-    return gulp.src('app/jsDev/*.js')
+    return gulp.src('www/jsDev/*.js')
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('app/js'));
+        .pipe(gulp.dest('www/js'));
 });
 
 gulp.task('default', ['serve']);

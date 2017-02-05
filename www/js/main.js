@@ -365,4 +365,4 @@ var HangmanController = function () {
     };
 }();
 
-HangmanController.init();
+//HangmanController.init();

@@ -170,3 +170,47 @@ body {
   border-radius: 50%;
   margin: 3px 3px 5px 3px;
   box-shadow: 0 4px #444; }
+
+@media screen and (min-width: 0px) and (max-width: 479px) {
+  .game-Module {
+    width: 320px; }
+  .hangman {
+    width: 320px; }
+  .game-status {
+    height: 187px; }
+  .game-image {
+    height: 180px; }
+  .screen0 {
+    background: url("../img/s0_min.jpg") no-repeat center top; }
+  .screen1 {
+    background: url("../img/s1_min.jpg") no-repeat center top; }
+  .screen2 {
+    background: url("../img/s2_min.jpg") no-repeat center top; }
+  .screen3 {
+    background: url("../img/s3_min.jpg") no-repeat center top; }
+  .screen4 {
+    background: url("../img/s4_min.jpg") no-repeat center top; }
+  .screen5 {
+    background: url("../img/s5_min.jpg") no-repeat center top; }
+  .screen6 {
+    background: url("../img/s6_min.jpg") no-repeat center top; }
+  .screen7 {
+    background: url("../img/s7_min.jpg") no-repeat center top; }
+  .screen8 {
+    background: url("../img/s8_min.jpg") no-repeat center top; }
+  .screen9 {
+    background: url("../img/s9_min.jpg") no-repeat center top; }
+  .keyboard {
+    width: 306px; }
+  .key {
+    width: 34px;
+    border-radius: 5px; }
+  .reset {
+    width: 150px;
+    border-radius: 5px; }
+  .false {
+    width: 34px;
+    border-radius: 5px; }
+  .correct {
+    width: 34px;
+    border-radius: 5px; } }

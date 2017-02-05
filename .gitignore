@@ -1,4 +1,7 @@
 /node_modules
+/.idea
+gulpfile.js
+
 
 # Windows image file caches
 Thumbs.db

@@ -259,4 +259,4 @@ let HangmanController = (function(){
     }
 })();
 
-HangmanController.init();
+//HangmanController.init();

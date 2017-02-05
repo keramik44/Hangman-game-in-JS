@@ -1,0 +1,50 @@
+@media screen and (min-width: 0px) and (max-width: 479px) {
+  .game-Module {
+    width: 320px; }
+  .title {
+    font-size: 25px;
+    margin: 10px 0 10px 0;
+    height: 25px; }
+  .hangman {
+    width: 320px; }
+  .game-status {
+    height: 187px; }
+  .game-image {
+    height: 180px; }
+  .screen0 {
+    background: url("../img/s0_min.jpg") no-repeat center top; }
+  .screen1 {
+    background: url("../img/s1_min.jpg") no-repeat center top; }
+  .screen2 {
+    background: url("../img/s2_min.jpg") no-repeat center top; }
+  .screen3 {
+    background: url("../img/s3_min.jpg") no-repeat center top; }
+  .screen4 {
+    background: url("../img/s4_min.jpg") no-repeat center top; }
+  .screen5 {
+    background: url("../img/s5_min.jpg") no-repeat center top; }
+  .screen6 {
+    background: url("../img/s6_min.jpg") no-repeat center top; }
+  .screen7 {
+    background: url("../img/s7_min.jpg") no-repeat center top; }
+  .screen8 {
+    background: url("../img/s8_min.jpg") no-repeat center top; }
+  .screen9 {
+    background: url("../img/s9_min.jpg") no-repeat center top; }
+  .keyboard {
+    width: 306px; }
+  .key {
+    height: 27px;
+    width: 34px;
+    border-radius: 5px; }
+  .reset {
+    width: 150px;
+    border-radius: 5px; }
+  .false {
+    height: 27px;
+    width: 34px;
+    border-radius: 5px; }
+  .correct {
+    height: 27px;
+    width: 34px;
+    border-radius: 5px; } }
